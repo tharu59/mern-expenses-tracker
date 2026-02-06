@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../model/User");
 
+
 // !user Registration
 
 const usersController = {
@@ -56,6 +57,15 @@ const usersController = {
       process.env.JWT_SECRET,
       { expiresIn: "2h" }, // 👈 2 hours
     );
+
+    // 🍪 SET COOKIE HERE
+    res.cookie("token", token, {
+      httpOnly: true, // JS cannot access
+      secure: false, // true in production (HTTPS)
+      sameSite: "lax", // good default
+      maxAge: 2 * 60 * 60 * 1000, // 2 hours
+    });
+
     //! send the response
     res.json({
       message: "Login Success",
