@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../model/User");
 
 // !user Registration
@@ -36,6 +37,34 @@ const usersController = {
     });
   }),
   // !Login
+  login: asyncHandler(async (req, res) => {
+    // ?Get the user Data
+    const { email, password } = req.body;
+    // ! check is email valid or not
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error("Email not found Please register");
+    }
+    // !compare the user password with bcrypt
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new Error("Please enter correct password");
+    }
+    // !generate Token
+    const token = jwt.sign(
+      { username: user.username, id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "2h" }, // 👈 2 hours
+    );
+    //! send the response
+    res.json({
+      message: "Login Success",
+      token,
+      id: user._id,
+      email: user.email,
+      username: user.username,
+    });
+  }),
   // !Profile
 };
 
