@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../model/User");
 
-
 // !user Registration
 
 const usersController = {
@@ -76,6 +75,19 @@ const usersController = {
     });
   }),
   // !Profile
+  profile: asyncHandler(async (req, res) => {
+    // ! Find the user
+    // console.log(req.user);
+    const user = await User.findById("6985c03a95686569bca758bd");
+    if (!user) {
+      throw new Error("User not Found");
+    }
+    // ! Send the response
+    res.json({
+      username: user.username,
+      email: user.email,
+    });
+  }),
 };
 
 module.exports = usersController;

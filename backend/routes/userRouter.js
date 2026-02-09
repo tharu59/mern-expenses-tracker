@@ -1,13 +1,17 @@
 const express = require("express");
 const usersController = require("../controllers/usersController");
-const authMiddleware = require("../middlewares/authMiddleware");
+const isAuthenticated = require("../middlewares/isAuth");
 
 const userRouter = express.Router();
 
+// !Register
 userRouter.post("/register", usersController.register);
+// ! Login
 userRouter.post("/login", usersController.login);
-
-userRouter.get("/tharun", authMiddleware, (req, res) => {
+// !Profile
+userRouter.post("/profile", isAuthenticated, usersController.profile);
+// ! Home
+userRouter.get("/tharun", isAuthenticated, (req, res) => {
   res.json({ user: req.user });
 });
 

@@ -1,8 +1,11 @@
 const jwt = require("jsonwebtoken");
 
-const authMiddleware = (req, res, next) => {
+const isAuthenticated = (req, res, next) => {
+  // console.log(req.headers);
   // 1️⃣ Get token from cookie
   const token = req.cookies.token;
+  // ! key-->Authorization
+  // const authHeader = req.headers.authorization;
 
   if (!token) {
     return res.status(401).json({
@@ -10,12 +13,22 @@ const authMiddleware = (req, res, next) => {
     });
   }
 
+  // !With Bearer
+  //  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  //    return res.status(401).json({
+  //      message: "No token provided",
+  //    });
+  //  }
+  // const token = authHeader.split(" ")[1];
+
   try {
     // 2️⃣ Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // 3️⃣ Attach decoded data to request
     req.user = decoded;
+    // only for id
+    // req.user = decoded.id;
 
     // 4️⃣ Move to next
     next();
@@ -26,4 +39,4 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+module.exports = isAuthenticated;
