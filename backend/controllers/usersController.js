@@ -78,7 +78,7 @@ const usersController = {
   profile: asyncHandler(async (req, res) => {
     // ! Find the user
     // console.log(req.user);
-    const user = await User.findById("6985c03a95686569bca758bd");
+    const user = await User.findById(req.user.id);
     if (!user) {
       throw new Error("User not Found");
     }
@@ -87,6 +87,35 @@ const usersController = {
       username: user.username,
       email: user.email,
     });
+  }),
+  // !Change Password
+  changeUserPassword: asyncHandler(async (req, res) => {
+    const { newPassword } = req.body;
+    // !Find the user
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      throw new Error("user not Found");
+    }
+    // !Hashing the new password before saving
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashedPassword;
+    // ! Resave the password
+    await user.save();
+    // ! send the response
+    res.json({ message: "Password Changed Successfully" });
+  }),
+
+  // !Update Profile
+  updateUserProfile: asyncHandler(async (req, res) => {
+    const { email, username } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { username, email },
+      { new: true },
+    );
+    // ! send the response
+    res.json({ message: "User profile updated successfully", updatedUser });
   }),
 };
 
