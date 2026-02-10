@@ -8,12 +8,12 @@ const categorySchema = new mongoose.Schema(
       required: true,
     },
     name: {
-      type: string,
+      type: String,
       required: true,
       default: "Uncategorized",
     },
     type: {
-      type: string,
+      type: String,
       required: true,
       enum: ["income", "expense"],
     },

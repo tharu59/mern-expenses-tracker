@@ -4,6 +4,7 @@ const userRouter = require("./routes/userRouter");
 const connectDB = require("./Configs/mongoConfig");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./middlewares/errorhandler");
+const categoryRouter = require("./routes/categoryRouter");
 const app = express();
 
 // !connecting mongodb
@@ -14,8 +15,11 @@ app.use(express.json()); //?Passing incoming json Data
 app.use(cookieParser());
 
 //! Routes
+// ? user Route
 app.use("/", userRouter);
-// !Error
+//  ? Category Route
+app.use("/", categoryRouter);
+// ? Error
 app.use(errorHandler);
 
 app.get("/", (req, res) => {

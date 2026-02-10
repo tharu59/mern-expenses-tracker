@@ -26,9 +26,12 @@ const isAuthenticated = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // 3️⃣ Attach decoded data to request
-    req.user = decoded;
+    // req.user = {
+    //   id: decoded.id,
+    //   username: decoded.username,
+    // };
     // only for id
-    // req.user = decoded.id;
+    req.user = decoded.id;
 
     // 4️⃣ Move to next
     next();
