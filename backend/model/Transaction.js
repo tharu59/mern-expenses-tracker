@@ -9,12 +9,12 @@ const transactionSchema = new mongoose.Schema(
     },
 
     type: {
-      type: string,
+      type: String,
       required: true,
       enum: ["income", "expense"],
     },
     category: {
-      type: string,
+      type: String,
       required: true,
       default: "Uncategorised",
     },

@@ -25,7 +25,7 @@ userRouter.put(
 );
 
 // ?OWN
-// ! Home
+// ! Home with auth
 userRouter.get("/tharun", isAuthenticated, (req, res) => {
   res.json({ user: req.user });
 });

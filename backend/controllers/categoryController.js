@@ -5,9 +5,9 @@ const categoryController = {
   // !add
   create: asyncHandler(async (req, res) => {
     const { name, type } = req.body;
-    if (!name) {
-      throw new Error("Name is required for creating a category");
-    }
+    // if (!name) {
+    //   throw new Error("Name is required for creating a category");
+    // }
     if (!type) {
       throw new Error("Type is required for creating a category");
     }
