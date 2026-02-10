@@ -11,6 +11,7 @@ const app = express();
 // !connecting mongodb
 connectDB();
 
+
 // !Middleware
 app.use(express.json()); //?Passing incoming json Data
 app.use(cookieParser());

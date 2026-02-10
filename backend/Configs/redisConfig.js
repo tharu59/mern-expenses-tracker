@@ -1,13 +1,13 @@
-import { createClient } from "redis";
-import { redisHost, redisPassword } from "./redisPassword";
+// import { createClient } from "redis";
+const { createClient } = require("redis");
 
 // Create Redis client
 const redisClient = createClient({
   username: "default",
-  password: redisPassword,
+  password: process.env.redisPassword,
   socket: {
-    host: redisHost,
-    port: 10149,
+    host: process.env.redisHost,
+    port: process.env.redisPort,
   },
 });
 
@@ -24,11 +24,15 @@ redisClient.on("ready", () => console.log("🟢 Redis connected successfully"));
 redisClient.on("end", () => console.error("🔴 Redis disconnected"));
 
 // Keep track of connection status
-let isConnected = false;
+// let isConnected = false;
 
 // Async function to connect Redis
 async function connectRedis() {
-  if (isConnected) return;
+  // if (isConnected) return;
+  if (redisClient.isOpen) {
+    console.log("⚡ Redis already connected");
+    return;
+  }
   try {
     await redisClient.connect();
     isConnected = true;
@@ -49,4 +53,4 @@ process.on("SIGINT", async () => {
   process.exit(0);
 });
 
-export default redisClient;
+module.exports = redisClient;

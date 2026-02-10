@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Transaction = require("../model/Transaction");
+const redisClient = require("../Configs/redisConfig");
+const connectDB = require("../Configs/mongoConfig");
 
 const transactionController = {
   // !add
@@ -21,10 +23,27 @@ const transactionController = {
   }),
   // ! Lists
   lists: asyncHandler(async (req, res) => {
+    const userId = req.user;
+    const redisKey = `transactions:${userId}`;
+    // 🔍 1️⃣ Check Redis
+    const cachedData = await redisClient.get(redisKey);
+    if (cachedData) {
+      console.log("Serving from Redis ⚡");
+      return res.json({
+        source: "redis",
+        transactions: JSON.parse(cachedData),
+      });
+    }
+    // 🟢 2️⃣ If not found, fetch from MongoDB
+    await connectDB();
+
     const transactions = await Transaction.find({
-      user: req.user,
+      user: userId,
     });
-    res.json(transactions);
+    // 💾 3️⃣ Store in Redis for 60 seconds
+    await redisClient.setEx(redisKey, 60, JSON.stringify(transactions));
+    console.log("Serving from MongoDB 🟢");
+    res.json({ source: "mongodb", transactions });
   }),
 
   // ! Update
