@@ -9,7 +9,8 @@ const isAuthenticated = (req, res, next) => {
 
   if (!token) {
     return res.status(401).json({
-      message: "Access Denied. No token provided",
+      // message: "Access Denied. No token provided",
+      message: "Please Login First",
     });
   }
 

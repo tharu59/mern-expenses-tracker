@@ -18,4 +18,11 @@ transactionRouter.get(
   transactionController.lists,
 );
 
+// !Filter
+transactionRouter.get(
+  "/transactions/filter",
+  isAuthenticated,
+  transactionController.getFilterTransactions,
+);
+
 module.exports = transactionRouter;

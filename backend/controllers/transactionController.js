@@ -46,6 +46,36 @@ const transactionController = {
     res.json({ source: "mongodb", transactions });
   }),
 
+  // !Filter
+  getFilterTransactions: asyncHandler(async (req, res) => {
+    const { startDate, endDate, type, category } = req.query;
+    // console.log(req.query);
+    // let filters = { user: req.user.id };
+    let filters = {};
+    if (startDate) {
+      filters.date = { ...filters.date, $gte: new Date(startDate) };
+    }
+    if (endDate) {
+      filters.date = { ...filters.date, $lte: new Date(endDate) };
+    }
+    if (type) {
+      filters.type = type;
+    }
+    if (category) {
+      if (category === "All") {
+      } else if (category === "Uncategorised") {
+        filters.category = "Uncategorised";
+      } else {
+        filters.category = category;
+      }
+    }
+    const transactions = await Transaction.find(filters).sort({ date: -1 });
+    res.status(200).json({
+      success: true,
+      data: transactions,
+    });
+  }),
+
   // ! Update
   update: asyncHandler(async (req, res) => {}),
 
