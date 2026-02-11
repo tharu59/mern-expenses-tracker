@@ -10,7 +10,7 @@ const isAuthenticated = (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       // message: "Access Denied. No token provided",
-      message: "Please Login First",
+      message: "No User is Logged In, Please Login First",
     });
   }
 
@@ -32,7 +32,8 @@ const isAuthenticated = (req, res, next) => {
     //   username: decoded.username,
     // };
     // only for id
-    req.user = decoded.id;
+    // req.user = decoded.id;
+    req.user = decoded;
 
     // 4️⃣ Move to next
     next();

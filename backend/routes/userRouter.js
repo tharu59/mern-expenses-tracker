@@ -24,6 +24,9 @@ userRouter.put(
   usersController.updateUserProfile,
 );
 
+// !logout User
+userRouter.post("/logout", isAuthenticated,usersController.logout);
+
 // ?OWN
 // ! Home with auth
 userRouter.get("/tharun", isAuthenticated, (req, res) => {

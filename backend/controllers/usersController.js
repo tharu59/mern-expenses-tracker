@@ -117,6 +117,22 @@ const usersController = {
     // ! send the response
     res.json({ message: "User profile updated successfully", updatedUser });
   }),
+
+  // !Logout
+  logout: asyncHandler(async (req, res) => {
+    const loggedInUser = req.user.username;
+    res.cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+      sameSite: "lax",
+      secure: false,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `${loggedInUser}, You Logged out successfully`,
+    });
+  }),
 };
 
 module.exports = usersController;

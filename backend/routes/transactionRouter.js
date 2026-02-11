@@ -25,4 +25,18 @@ transactionRouter.get(
   transactionController.getFilterTransactions,
 );
 
+// !update
+transactionRouter.put(
+  "/transactions/update/:id",
+  isAuthenticated,
+  transactionController.update,
+);
+
+// !Delete
+transactionRouter.delete(
+  "/transactions/delete/:id",
+  isAuthenticated,
+  transactionController.delete,
+);
+
 module.exports = transactionRouter;
